@@ -6,9 +6,7 @@ import { FaArrowRight, FaUsers } from "react-icons/fa";
 import { FaChalkboardUser } from "react-icons/fa6";
 import useDocumentTitle from "../../../functions/custom-hooks/useDocumentTitle";
 import { stats } from "../../json/status";
-// import DataTable from "../../../components/StudentDataTable";
 import { students } from "../../json/students";
-// import StudentDataTable from "../../../components/StudentDataTable";
 import StudentTable from "../student/StudentTable";
 
 const Dashboard = () => {
