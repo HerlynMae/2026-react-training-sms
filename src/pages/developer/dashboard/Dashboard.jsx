@@ -9,6 +9,9 @@ import { stats } from "../../json/status";
 import { students } from "../../json/students";
 import StudentTable from "../student/StudentTable";
 import { Link } from "react-router-dom";
+import TableLoading from "../../../partials/TableLoading";
+import NoData from "../../../partials/NoData";
+import ServerError from "../../../partials/ServerError";
 
 const Dashboard = () => {
   useDocumentTitle("Dashboard | School Management System");
@@ -59,6 +62,9 @@ const Dashboard = () => {
                 </div>
 
                 <StudentTable students={students} />
+                <TableLoading count={20} cols={10} />
+                <NoData />
+                <ServerError />
               </div>
             </div>
           </>
