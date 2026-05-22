@@ -8,23 +8,16 @@ const teachersColumns = [
     header: "Name",
     render: (teacher) => (
       <>
-        <div className="hidden xl:block">
-          <div className="flex items-center gap-3">
-            <div className="size-8 bg-blue-100 rounded-full flex items-center justify-center">
-              <FaUser className="text-blue-600 text-sm" />
-            </div>
-            <p className="font-medium">{teacher.name}</p>
-          </div>
-        </div>
-        <div className="block xl:hidden">
+        <div className="">
           <div className="flex items-center gap-3">
             <div className="size-8 bg-blue-100 rounded-full flex items-center justify-center">
               <FaUser className="text-blue-600 text-sm" />
             </div>
             <div>
               <p className="font-medium">{teacher.name}</p>
-
-              <p className="text-xs text-gray-500">{teacher.subject}</p>
+              <p className="text-xs text-gray-500 block xl:hidden">
+                {teacher.subject}
+              </p>
             </div>
           </div>
         </div>

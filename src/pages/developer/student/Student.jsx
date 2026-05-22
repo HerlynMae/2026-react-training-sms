@@ -36,6 +36,7 @@ const Student = () => {
               {/* student list */}
               <div>
                 <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                  
                   <StudentTable students={students} />
                   <div className="px-6 py-4 bg-gray-50 border-t flex justify-between">
                     <span className="text-sm text-gray-600">

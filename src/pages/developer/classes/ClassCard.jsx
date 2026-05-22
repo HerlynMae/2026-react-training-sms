@@ -26,7 +26,7 @@ const ClassCard = ({ gradeSection, name, value }) => {
             {/* <!-- student --> */}
             <ul className="flex justify-between mb-3">
               <li className="text-gray-600 flex items-center">
-                <span class="mr-2">
+                <span className="mr-2">
                   <FaUsers />
                 </span>
                 <p>Students:</p>
