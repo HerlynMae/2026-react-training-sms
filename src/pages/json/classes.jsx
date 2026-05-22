@@ -6,6 +6,7 @@ export const classes = [
     grade: "Grade 7",
     section: "Section A",
     gradeSection: "Grade 7 - Section A",
+    name: "Prof. Sarah Johnson",
     // name: teachers.find(teacher.id === teacher.teacherID)?.name,
     value: students.filter((student) => student.gradeSection === "Grade 7 - A")
       .length,

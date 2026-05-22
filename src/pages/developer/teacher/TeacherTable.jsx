@@ -3,6 +3,12 @@ import ResponsiveTable from "../../../components/ResponsiveTable";
 import { FaEdit, FaTrash, FaUser } from "react-icons/fa";
 
 const teachersColumns = [
+  // {
+  //   key: "teacherId",
+  //   header: "",
+  //   render: (teacher) => <p>{teacher.id}</p>,
+  //   mobileLabel: null,
+  // },
   {
     key: "name",
     header: "Name",
@@ -10,6 +16,7 @@ const teachersColumns = [
       <>
         <div className="">
           <div className="flex items-center gap-3">
+            <p className="hidden xl:block">{teacher.id}.</p>
             <div className="size-8 bg-blue-100 rounded-full flex items-center justify-center">
               <FaUser className="text-blue-600 text-sm" />
             </div>
@@ -25,6 +32,7 @@ const teachersColumns = [
     ),
     mobileLabel: null,
   },
+
   {
     key: "subject",
     header: "Subject",

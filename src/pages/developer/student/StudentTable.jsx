@@ -2,6 +2,12 @@ import { FaEdit, FaTrash, FaUser } from "react-icons/fa";
 import ResponsiveTable from "../../../components/ResponsiveTable";
 
 const studentColumns = [
+  // {
+  //   key: "studentId",
+  //   header: "",
+  //   render: (student) => <span>{student.id}</span>,
+  //   mobileLabel: null,
+  // },
   {
     key: "name",
     header: "Name",
@@ -9,6 +15,7 @@ const studentColumns = [
       <>
         <div className="">
           <div className="flex items-center gap-3">
+            <p className="hidden xl:block">{student.id}.</p>
             <div className="size-8 bg-blue-100 rounded-full flex items-center justify-center">
               <FaUser className="text-blue-600 text-sm" />
             </div>
@@ -24,12 +31,7 @@ const studentColumns = [
     ),
     mobileLabel: null,
   },
-  {
-    key: "studentId",
-    header: "Student ID",
-    render: (student) => <p>{student.studentId}</p>,
-    mobileLabel: null,
-  },
+
   {
     key: "gradeSection",
     header: "Grade & Section",
