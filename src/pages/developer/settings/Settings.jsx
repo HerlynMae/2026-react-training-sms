@@ -1,8 +1,10 @@
 import React from "react";
 import Layout from "../Layout";
 import Header from "../../../partials/Header";
+import useDocumentTitle from "../../../functions/custom-hooks/useDocumentTitle";
 
 const Settings = () => {
+  useDocumentTitle("Settings | School Management System");
   return (
     <>
       <Layout menu="settings">

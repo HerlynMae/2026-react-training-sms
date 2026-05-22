@@ -8,6 +8,7 @@ import useDocumentTitle from "../../../functions/custom-hooks/useDocumentTitle";
 import { stats } from "../../json/status";
 import { students } from "../../json/students";
 import StudentTable from "../student/StudentTable";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   useDocumentTitle("Dashboard | School Management System");
@@ -43,6 +44,12 @@ const Dashboard = () => {
                       Latest {totalStudents} students added to the system
                     </p>
                   </div>
+                  {/* <Link
+                    to="/developer/dashboard"
+                    className="text-blue-600 hover:text-blue-700 text-sm font-medium transition flex items-center"
+                  >
+                    View All <FaArrowRight className="ml-1" />
+                  </Link> */}
                   <a
                     href="./students.html"
                     className="text-blue-600 hover:text-blue-700 text-sm font-medium transition flex items-center"
