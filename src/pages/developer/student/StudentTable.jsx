@@ -31,7 +31,12 @@ const studentColumns = [
     ),
     mobileLabel: null,
   },
-
+  {
+    key: "studentId",
+    header: "Student ID",
+    render: (student) => <p>{student.studentId}</p>,
+    mobileLabel: "Student ID",
+  },
   {
     key: "gradeSection",
     header: "Grade & Section",
