@@ -4,6 +4,9 @@ import { queryData } from "../../../functions/custom-hooks/queryData";
 import { apiVersion } from "../../../functions/functions-general";
 import ModalWrapperSide from "../../../partials/modal/ModalWrapperSide";
 import { FaTimesCircle } from "react-icons/fa";
+import { Formik } from "formik";
+import { Form } from "react-router-dom";
+import { InputText } from "../../../functions/FormInputs";
 
 const ModalAddStudents = ({ itemEdit, setIsOpen }) => {
   //this is to animate the modal when it opens and closes
@@ -50,18 +53,38 @@ const ModalAddStudents = ({ itemEdit, setIsOpen }) => {
   return (
     <>
       <ModalWrapperSide handleClose={handleClose} className={`${animate}`}>
-        <div className="relative mb-4 ">
-          <h3 className="text-dark text-sm">Add Student</h3>
+        <div className="flex justify-between mb-4  px-3 pt-2 ">
+          <h3 className="text-black/80 font-medium text-sm">Add Student</h3>
           <button
-            className="absolute top-0 right-4"
+            className=" text-black/50 cursor-pointer"
             type="button"
             onClick={handleClose}
             disabled={mutation.isPending}
           >
-            <FaTimesCircle />
+            <FaTimesCircle className="text-sm" />
           </button>
         </div>
-        <div className="modal-body"></div>
+        <div className="modal-body">
+          <Formik
+            initialValues={{}}
+            validationSchema={null}
+            onSubmit={() => {}}
+          >
+            {(props) => {
+              return (
+                <Form>
+                  <div className="relative mb-6">
+                    <InputText
+                      label="Student ID"
+                      name="student_id"
+                      disabled={mutation.isPending}
+                    />
+                  </div>
+                </Form>
+              );
+            }}
+          </Formik>
+        </div>
       </ModalWrapperSide>
     </>
   );
