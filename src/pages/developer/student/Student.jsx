@@ -6,8 +6,17 @@ import useDocumentTitle from "../../../functions/custom-hooks/useDocumentTitle";
 import { students } from "../../json/students";
 // import StudentDataTable from "../../../components/StudentDataTable";
 import StudentTable from "./StudentTable";
+import ModalAddStudents from "./ModalAddStudents";
 
 const Student = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [itemEdit, setItemEdit] = React.useState(null);
+
+  const handleAdd = () => {
+    setItemEdit(null);
+    setIsOpen(true);
+  };
+
   useDocumentTitle("Students | School Management System");
 
   const totalStudents = students.length;
@@ -28,7 +37,10 @@ const Student = () => {
             <div className="px-8 py-6">
               {/* add student button */}
               <div className="flex justify-end items-center mb-6">
-                <button className="bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2">
+                <button
+                  className="bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2"
+                  onClick={handleAdd}
+                >
                   <FaPlus /> Add Student
                 </button>
               </div>
@@ -36,7 +48,6 @@ const Student = () => {
               {/* student list */}
               <div>
                 <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                  
                   <StudentTable students={students} />
                   <div className="px-6 py-4 bg-gray-50 border-t flex justify-between">
                     <span className="text-sm text-gray-600">
@@ -49,6 +60,8 @@ const Student = () => {
           </>
         )}
       </Layout>
+
+      {isOpen && <ModalAddStudents itemEdit={itemEdit} setIsOpen={setIsOpen} />}
     </>
   );
 };
