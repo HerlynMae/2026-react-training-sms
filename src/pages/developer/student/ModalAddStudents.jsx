@@ -7,6 +7,7 @@ import { FaTimesCircle } from "react-icons/fa";
 import { Formik, Form } from "formik";
 import { InputText } from "../../../functions/FormInputs";
 import * as Yup from "yup"; //for validation of form
+import ButtonSpinner from "../../../partials/spinners/ButtonSpinner";
 
 const ModalAddStudents = ({ itemEdit, setIsOpen }) => {
   //this is to animate the modal when it opens and closes
@@ -21,29 +22,32 @@ const ModalAddStudents = ({ itemEdit, setIsOpen }) => {
     //mutationFn is the function that will be called when the mutation is executed. It is an async function that will return a promise. The promise will be resolved with the data that is returned from the server. The data will be passed to the onSuccess callback function.
     mutationFn: async (values) =>
       queryData(
-        `${apiVersion}/controllers/developer/students/students.php`, // create url
-        "POST", // post = create
+        itemEdit
+          ? `${apiVersion}/controllers/developer/students/students.php?id=${itemEdit.students_id}`
+          : `${apiVersion}/controllers/developer/students/students.php`, // create url
+        itemEdit ? "PUT" : "POST", // post = create, put = update
         values, //the data that will be send to the server
       ),
     onSuccess: (data) => {
       if (data.success) {
-        alert("Successfully added."); //if the update or create is successful, show a success message and close the modal
+        alert(`Successfully ${itemEdit ? "updated" : "added"}.`); //if the update or create is successful, show a success message and close the modal
         setIsOpen(false);
       } else {
         alert(data.error); //if the update or create is not successful, show an error message
       }
-      queryClient.invalidateQueries(["students"]); //refetch the data after the update or create is successful
+      queryClient.invalidateQueries({ queryKey: ["students"] }); //refetch the data after the update or create is successful
     },
   });
 
   //this is the initial values for the formik form
+  //if item edit exist show all the records
   const initVal = {
-    students_id: "",
-    students_first_name: "",
-    students_middle_name: "",
-    students_last_name: "",
-    students_grade: "",
-    students_section: "",
+    students_id: itemEdit ? itemEdit.students_id : "",
+    students_first_name: itemEdit ? itemEdit.students_first_name : "",
+    students_middle_name: itemEdit ? itemEdit.students_middle_name : "",
+    students_last_name: itemEdit ? itemEdit.students_last_name : "",
+    students_grade: itemEdit ? itemEdit.students_grade : "",
+    students_section: itemEdit ? itemEdit.students_section : "",
   };
   //this is the validation schema for the formik form
   const yupSchema = Yup.object({
@@ -73,7 +77,9 @@ const ModalAddStudents = ({ itemEdit, setIsOpen }) => {
     <>
       <ModalWrapperSide handleClose={handleClose} className={`${animate}`}>
         <div className="flex justify-between mb-4  px-3 pt-2 ">
-          <h3 className="text-black/80 font-medium text-sm">Add Student</h3>
+          <h3 className="text-black/80 font-medium text-sm">
+            {itemEdit ? "Update" : "Add"} Student
+          </h3>
           <button
             className=" text-black/50 cursor-pointer"
             type="button"
@@ -146,7 +152,13 @@ const ModalAddStudents = ({ itemEdit, setIsOpen }) => {
                         disabled={mutation.isPending || !props.dirty}
                         className="btn-modal-submit"
                       >
-                        Add
+                        {mutation.isPending ? (
+                          <ButtonSpinner />
+                        ) : itemEdit ? (
+                          "Save"
+                        ) : (
+                          "Add"
+                        )}
                       </button>
                       <button
                         type="reset"

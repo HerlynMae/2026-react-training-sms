@@ -1,6 +1,6 @@
 import React from "react";
 
-const TableLoading = ({ count = null, cols = null, className = "h-1.75" }) => {
+const TableLoading = ({ count = null, cols = null, className = "h-[7px]" }) => {
   const box = [];
   let i;
 

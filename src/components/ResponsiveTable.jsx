@@ -1,4 +1,15 @@
-const ResponsiveTable = ({ data, columns }) => {
+import NoData from "../partials/NoData";
+import ServerError from "../partials/ServerError";
+import FetchingSpinner from "../partials/spinners/FetchingSpinner";
+import TableLoading from "../partials/TableLoading";
+
+const ResponsiveTable = ({
+  data,
+  columns,
+  isLoading = false,
+  isFetching = false,
+  error = false,
+}) => {
   const mainCol = columns.find((c) => c.mobileLabel === null);
   const topRightCol = columns.find((c) => c.mobilePosition === "topRight");
   const bodyColumns = columns.filter(
@@ -12,7 +23,9 @@ const ResponsiveTable = ({ data, columns }) => {
   return (
     <>
       {/* Desktop table */}
-      <div className="hidden xl:block overflow-x-auto">
+      <div className="hidden xl:block overflow-x-auto relative">
+        {/* this is when page is loaded but need to refetch the data */}
+        {isLoading && isFetching && <FetchingSpinner />}
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
@@ -27,42 +40,81 @@ const ResponsiveTable = ({ data, columns }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {data.map((row) => (
-              <tr key={row.id}>
-                {columns.map((col) => (
-                  <td key={col.key} className="px-6 py-4">
-                    {col.render(row)}
-                  </td>
-                ))}
+            {isLoading ? (
+              <tr>
+                <td colSpan="100%" className="p-5">
+                  //this is initial page loading
+                  <TableLoading cols={2} count={20} />
+                </td>
               </tr>
-            ))}
+            ) : error ? (
+              <tr>
+                <td colSpan="100%" className="p-5">
+                  {/* //this is error request */}
+                  <ServerError />
+                </td>
+              </tr>
+            ) : data.length == 0 ? (
+              <tr>
+                <td colSpan="100%" className="p-5">
+                  {/* //this is no data */}
+                  <NoData />
+                </td>
+              </tr>
+            ) : (
+              data.map((row) => (
+                <tr key={row.id}>
+                  {columns.map((col) => (
+                    <td key={col.key} className="px-6 py-4">
+                      {col.render(row)}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
       {/* Mobile cards */}
+      {/* when page is loaded but need to refetch the data */}
+      {isLoading && !isFetching && <FetchingSpinner />}
       <div className="xl:hidden divide-y divide-gray-100">
-        {data.map((row) => (
-          <div key={row.id} className="p-4">
-            <div className="flex justify-between items-start mb-3">
-              {mainCol?.render(row)}
-              {topRightCol?.render(row)}
-            </div>
-            <div className="flex justify-between items-center">
-              <div>
-                {bodyColumns.map((col) => (
-                  <div key={col.key}>
-                    <small className="text-xs text-gray-500">
-                      {col.mobileLabel}
-                    </small>
-                    {col.render(row)}
-                  </div>
-                ))}
-              </div>
-              {bottomRight?.render(row)}
-            </div>
+        {!isLoading ? (
+          <div className=" p-5 ">
+            <TableLoading cols={5} count={30} />
           </div>
-        ))}
+        ) : error ? (
+          <div className="flex justify-center items-center p-5" colSpan="100%">
+            <ServerError />
+          </div>
+        ) : data.length == 0 ? (
+          <div className="flex justify-center items-center p-5" colSpan="100%">
+            <NoData />
+          </div>
+        ) : (
+          data.map((row) => (
+            <div key={row.id} className="p-4">
+              <div className="flex justify-between items-start mb-3">
+                {mainCol?.render(row)}
+                {topRightCol?.render(row)}
+              </div>
+              <div className="flex justify-between items-center">
+                <div>
+                  {bodyColumns.map((col) => (
+                    <div key={col.key}>
+                      <small className="text-xs text-gray-500">
+                        {col.mobileLabel}
+                      </small>
+                      {col.render(row)}
+                    </div>
+                  ))}
+                </div>
+                {bottomRight?.render(row)}
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </>
   );

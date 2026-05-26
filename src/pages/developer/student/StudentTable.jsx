@@ -3,6 +3,11 @@ import ResponsiveTable from "../../../components/ResponsiveTable";
 import useQueryData from "../../../functions/custom-hooks/useQueryData";
 import { apiVersion } from "../../../functions/functions-general";
 
+const handleUpdate = (setIsOpen, setItemEdit, item) => {
+  setIsOpen(true);
+  setItemEdit(item);
+};
+
 const studentColumns = [
   {
     key: "name",
@@ -11,7 +16,7 @@ const studentColumns = [
       <>
         <div className="">
           <div className="flex items-center gap-3">
-            <p className="hidden xl:block">{student.id}.</p>
+            <p className="hidden xl:block">{student.id}</p>
             <div className="size-8 bg-blue-100 rounded-full flex items-center justify-center">
               <FaUser className="text-blue-600 text-sm" />
             </div>
@@ -59,34 +64,58 @@ const studentColumns = [
   {
     key: "actions",
     header: "Actions",
-    render: (student) => (
-      <div className="flex gap-2">
-        <button className="cursor-pointer text-blue-600 hover:text-blue-800">
-          <FaEdit />
-        </button>
-        <button className="cursor-pointer text-red-600 hover:text-red-800">
-          <FaTrash />
-        </button>
-      </div>
-    ),
+    render: (student) => {
+      return (
+        <div className="flex gap-2">
+          <button
+            className="cursor-pointer text-blue-600 hover:text-blue-800"
+            onClick={() =>
+              handleUpdate(student.setIsOpen, student.setItemEdit, student)
+            }
+          >
+            <FaEdit />
+          </button>
+          <button className="cursor-pointer text-red-600 hover:text-red-800">
+            <FaTrash />
+          </button>
+        </div>
+      );
+    },
     mobilePosition: "bottomRight",
   },
 ];
 
-const StudentTable = ({ students }) => {
+const StudentTable = ({ students, setIsOpen, setItemEdit, itemEdit }) => {
   const {
     isLoading: isLoadingStudents,
     isFetching: isFetchingStudents,
     error: errorStudents,
     data: dataStudents,
   } = useQueryData(`${apiVersion}/controllers/developer/students/students.php`);
-  ("get", "students");
+  ("get", //method
+    "students"); //key
+
+  const studentArray =
+    dataStudents?.data.map((item) => {
+      return {
+        ...item,
+        id: item.student_aid,
+        name: `${item.students_first_name} ${item.students_last_name}`,
+        studentId: item.students_id,
+        gradeSection: `${item.students_grade} - ${item.students_section}`,
+        status: item.students_is_active ? "Active" : "Inactive",
+        setIsOpen,
+        setItemEdit,
+      };
+    }) ?? [];
+
   return (
     <ResponsiveTable
       isLoading={isLoadingStudents}
       isFetching={isFetchingStudents}
       error={errorStudents}
-      data={students}
+      // data={students}
+      data={studentArray}
       columns={studentColumns}
     />
   );

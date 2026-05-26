@@ -33,6 +33,12 @@ if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
         sendResponse($result);
         exit;
     }
+    //PUT == UPDATE  A RECORD
+    if ($_SERVER['REQUEST_METHOD'] == "PUT") {
+        $result = require 'update.php';
+        sendResponse($result);
+        exit;
+    }
 }
 
 //this is to prevent white page
