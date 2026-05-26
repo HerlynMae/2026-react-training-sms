@@ -106,14 +106,14 @@ class Students
     {
         try {
             $sql = "update {$this->tblStudents} set ";
-            $sql .= "students_id = :students_id";
-            $sql .= "students_first_name = :students_first_name";
-            $sql .= "students_middle_name = :students_middle_name";
-            $sql .= "students_last_name = :students_last_name";
-            $sql .= "students_grade = :students_grade";
-            $sql .= "students_section = :students_section";
-            $sql .= "students_updated = :students_updated";
-            $sql .= "where students_aid = :students_aid";
+            $sql .= "students_id = :students_id, ";
+            $sql .= "students_first_name = :students_first_name, ";
+            $sql .= "students_middle_name = :students_middle_name, ";
+            $sql .= "students_last_name = :students_last_name, ";
+            $sql .= "students_grade = :students_grade, ";
+            $sql .= "students_section = :students_section, ";
+            $sql .= "students_updated = :students_updated ";
+            $sql .= "where students_aid = :students_aid ";
             $query = $this->connection->prepare($sql);
             $query->execute([
                 'students_id' => $this->students_id,
@@ -126,6 +126,7 @@ class Students
                 'students_aid' => $this->students_aid,
             ]);
         } catch (PDOException $e) {
+            returnHandleError($e);
             $query = false;
         }
         return $query;

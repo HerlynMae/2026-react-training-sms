@@ -9,7 +9,6 @@ $val = new Students($conn);
 
 $val->students_aid = $_GET['id'];
 
-$val->students_is_active = 1; //set the is_active to 1 by default when creating a new student
 $val->students_id = $data['students_id']; //set the students_id to the value of the students_id in the request body
 $val->students_first_name = $data['students_first_name']; //set the students_first_name to the value of the students_first_name in the request body
 $val->students_middle_name = $data['students_middle_name']; //set the students_middle_name to the value of the students_middle_name in the request body

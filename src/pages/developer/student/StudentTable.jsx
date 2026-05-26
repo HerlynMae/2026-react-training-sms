@@ -99,7 +99,7 @@ const StudentTable = ({ students, setIsOpen, setItemEdit, itemEdit }) => {
     dataStudents?.data.map((item) => {
       return {
         ...item,
-        id: item.student_aid,
+        id: item.students_aid,
         name: `${item.students_first_name} ${item.students_last_name}`,
         studentId: item.students_id,
         gradeSection: `${item.students_grade} - ${item.students_section}`,
