@@ -18,6 +18,7 @@ function checkDbConnection()
 
 function checkQuery($query, $msg)
 {
+    //if there's a ! before the $query it means that if the $query is false it will return the error message
     if (!$query) returnHandleError($msg);
 }
 
@@ -65,7 +66,7 @@ function returnSuccess($object, $name, $query, $data = null)
     $returnData = [];
     $returnData['data'] = $data;
     $returnData['count'] = $query->rowCount();
-    $returnData["{$name} ID"] = $object->lastInsertId();
+    $returnData["{$name} ID"] = $object->lastInsertedId;
     $returnData['success'] = true;
     $returnData['server_date'] = date('Y-m-d');
     $response->setData($returnData);
@@ -76,7 +77,7 @@ function returnSuccess($object, $name, $query, $data = null)
 //this function is used to retrieve all the data
 function getResultData($query)
 {
-    $data = $query->fetchAll();
+    $data = $query->fetchAll(PDO::FETCH_ASSOC);
     return $data;
 }
 
@@ -122,6 +123,22 @@ function sendResponse($result)
     $response->setStatusCode(200);
     $response->setData($result);
     $response->send();
+}
+
+function checkAccess()
+{
+    returnHandleError("Forbidden access", "Invalid request", "", "401");
+}
+
+function checkEndpoint()
+{
+    returnHandleError("Endpoint not found", "Invalid endpoint", "", "404");
+}
+
+function checkId($id)
+{
+    if (!$id || !is_numeric($id))
+        returnHandleError("Invalid ID", "Invalid Request", "", "402");
 }
 
 //exit; - means to stop the execution of the script after sending the response to the frontend client. 

@@ -1,13 +1,9 @@
 import { FaEdit, FaTrash, FaUser } from "react-icons/fa";
 import ResponsiveTable from "../../../components/ResponsiveTable";
+import useQueryData from "../../../functions/custom-hooks/useQueryData";
+import { apiVersion } from "../../../functions/functions-general";
 
 const studentColumns = [
-  // {
-  //   key: "studentId",
-  //   header: "",
-  //   render: (student) => <span>{student.id}</span>,
-  //   mobileLabel: null,
-  // },
   {
     key: "name",
     header: "Name",
@@ -78,7 +74,22 @@ const studentColumns = [
 ];
 
 const StudentTable = ({ students }) => {
-  return <ResponsiveTable data={students} columns={studentColumns} />;
+  const {
+    isLoading: isLoadingStudents,
+    isFetching: isFetchingStudents,
+    error: errorStudents,
+    data: dataStudents,
+  } = useQueryData(`${apiVersion}/controllers/developer/students/students.php`);
+  ("get", "students");
+  return (
+    <ResponsiveTable
+      isLoading={isLoadingStudents}
+      isFetching={isFetchingStudents}
+      error={errorStudents}
+      data={students}
+      columns={studentColumns}
+    />
+  );
 };
 
 export default StudentTable;

@@ -28,9 +28,9 @@ class Students
     {
         try {
             // .= means concatenate the string to the variable $sql
-            $sql = "insert into";
-            $sql .= "{$this->tblStudents}";
-            $sql .= "(students_is_active,";
+            $sql = "insert into ";
+            $sql .= "{$this->tblStudents} ";
+            $sql .= "( students_is_active,";
             $sql .= "students_id,";
             $sql .= "students_first_name,";
             $sql .= "students_middle_name,";
@@ -60,7 +60,43 @@ class Students
                 'students_created' => $this->students_created,
                 'students_updated' => $this->students_updated,
             ]);
-        } catch (throwable $e) {
+            $this->lastInsertedId = $this->connection->lastInsertId();
+        } catch (PDOException $e) {
+            returnHandleError($e);
+            $query = false;
+        }
+        return $query;
+    }
+
+    public function ReadAll()
+    {
+        try {
+            $sql = "select "; // select is used to select data from the database
+            $sql .= "* "; // * means select all columns from the database
+            $sql .= "from {$this->tblStudents} "; // from is used to specify the table from which to select data
+            $sql .= "order by "; // order by is used to sort the data in ascending or descending order
+            $sql .= "students_first_name, "; // sort the data by students_first_name in ascending order
+            $sql .= "students_last_name "; // sort the data by students_last_name in ascending order
+            $query = $this->connection->query($sql); // query is used to execute the SQL statement and return the result set as a PDOStatement object   
+        } catch (PDOException $e) {
+            $query = false;
+        }
+        return $query;
+    }
+
+    public function ReadById()
+    {
+        try {
+            $sql = "select "; // select is used to select data from the database
+            $sql .= "* "; // * means select all columns from the database
+            $sql .= "from {$this->tblStudents} "; // from is used to specify the table from which to select data
+            $sql .= "where ";
+            $sql  .= "students_aid = :students_aid ";
+            $query = $this->connection->query($sql); // query is used to execute the SQL statement and return the result set as a PDOStatement object   
+            $query->execute([
+                'students_aid' => $this->students_aid,
+            ]);
+        } catch (PDOException $e) {
             $query = false;
         }
         return $query;

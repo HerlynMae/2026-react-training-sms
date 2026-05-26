@@ -5,19 +5,19 @@
 
 class Database
 {
-    private $dbConnection;
+    private static $dbConnection;
 
     public static function connectDb()
     {
         //local configuration
         $host = "localhost";
-        $dbName = "viter-sms-v1";
+        $dbName = "viter-sms_v1";
         $username = "root";
         $password = "";
 
         //production configuration
         // $host = "localhost";
-        // $dbName = "viter-sms-v1";
+        // $dbName = "viter-sms_v1";
         // $username = "root";
         // $password = "";
 
