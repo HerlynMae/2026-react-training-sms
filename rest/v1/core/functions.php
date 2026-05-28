@@ -59,6 +59,13 @@ function checkDelete($object)
     return $query;
 }
 
+function checkActive($object)
+{
+    $query = $object->active();
+    checkQuery($query, "There's a problem processing your request. (active)");
+    return $query;
+}
+
 //this function will return success if the updates in the database is successful
 function returnSuccess($object, $name, $query, $data = null)
 {
@@ -108,6 +115,7 @@ function returnHandleError(
     $error['count'] = 0;
     $error['success'] = false;
     $error['message'] = $msg;
+    $error['error'] = $msg;
     $error['error_message'] = $error_message;
     $error['error_description'] = $error_description;
     $error['error_code'] = $error_code;

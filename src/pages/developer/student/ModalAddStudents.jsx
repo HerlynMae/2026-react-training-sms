@@ -23,7 +23,7 @@ const ModalAddStudents = ({ itemEdit, setIsOpen }) => {
     mutationFn: async (values) =>
       queryData(
         itemEdit
-          ? `${apiVersion}/controllers/developer/students/students.php?id=${itemEdit.students_id}`
+          ? `${apiVersion}/controllers/developer/students/students.php?id=${itemEdit.students_aid}`
           : `${apiVersion}/controllers/developer/students/students.php`, // create url
         itemEdit ? "PUT" : "POST", // post = create, put = update
         values, //the data that will be send to the server

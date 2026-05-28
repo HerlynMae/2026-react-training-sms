@@ -1,8 +1,12 @@
 import React from "react";
 import Navigation from "../../partials/Navigation";
 import { navList } from "../json/nav-function";
+import { StoreContext } from "@/store/StoreContext";
+import ModalSuccess from "@/partials/modal/ModalSuccess";
 
 const Layout = ({ children, menu = "", submenu = "" }) => {
+  const { store, dispatch } = React.useContext(StoreContext);
+
   // TODO: use menu and submenu to determine which menu item is active
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -54,6 +58,8 @@ const Layout = ({ children, menu = "", submenu = "" }) => {
             : children}
         </main>
       </section>
+
+      {store.isSuccess && <ModalSuccess />}
     </>
   );
 };

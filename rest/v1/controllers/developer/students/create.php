@@ -3,6 +3,8 @@
 //declaration of connection to the database
 $conn = null;
 $conn = checkDbConnection(); //set connection to the database
+$body = file_get_contents("php://input"); //for network
+$data = json_decode($body, true); //when you are inserting data
 
 //store model class in variable
 $val = new Students($conn);

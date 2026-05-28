@@ -1,7 +1,7 @@
 import { devApiUrl } from "../functions-general";
 import { devKey } from "../functions-general";
 
-export const queryData = (endpoint, method = "GET", fd = {}) => {
+export const queryData = (endpoint, method = "get", fd = {}) => {
   let url = devApiUrl + endpoint;
   let username = devKey;
   let password = "";
@@ -16,7 +16,7 @@ export const queryData = (endpoint, method = "GET", fd = {}) => {
   };
 
   //stringify the fd object and add it to the body of the request if the method is not GET
-  if (method !== "GET") {
+  if (method !== "get") {
     options = {
       ...options,
       body: JSON.stringify(fd),

@@ -9,9 +9,14 @@ require_once "../../../core/functions.php";
 //require the model classes to allow us to use the functions in the model classes
 require_once "../../../models/developer/students/Students.php";
 
+$conn = null;
+$conn = checkDbConnection();
+
 //get payload from frontend
 $body = file_get_contents("php://input");
 $data = json_decode($body, true);
+
+$val = new Students($conn);
 
 //HTTP AUTHORIZATION is the first layer of security in our web application. 
 // It is used to check if the request is coming from an authorized source. 
@@ -21,29 +26,17 @@ $data = json_decode($body, true);
 
 // isset() is used to check if the HTTP_AUTHORIZATION header is set in the request.
 if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
-    //POST == CREATE  A RECORD
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-        $result = require 'create.php';
-        sendResponse($result);
-        exit;
-    }
-    //GET == RETRIEVE  A RECORD
-    if ($_SERVER['REQUEST_METHOD'] == "GET") {
-        $result = require 'read.php';
-        sendResponse($result);
-        exit;
-    }
-    //PUT == UPDATE  A RECORD
-    if ($_SERVER['REQUEST_METHOD'] == "PUT") {
-        $result = require 'update.php';
-        sendResponse($result);
-        exit;
-    }
-    //DELETE == DELETE  A RECORD
-    if ($_SERVER['REQUEST_METHOD'] == "DELETE") {
-        $result = require 'delete.php';
-        sendResponse($result);
-        exit;
+    if (array_key_exists('id', $_GET)) {
+        $val->students_aid = $_GET['id'];
+        $val->students_is_active = trim($data['isActive']);
+        $val->students_updated = date('Y-m-d H:i:s');
+
+        // validation
+        checkId($val->students_aid);
+
+        $query = checkActive($val);
+        http_response_code(200);
+        returnSuccess($val, 'Students Active', $query);
     }
 }
 

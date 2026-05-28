@@ -19,6 +19,5 @@ $val->students_updated = date("Y-m-d H:i:s"); //set the students_updated to the 
 
 // validation
 checkId($val->students_aid);
-
 $query = checkUpdate($val); //call the checkCreate function to create a new student and store the result in the variable $query
 returnSuccess($val, "Students", $query); //call the returnSuccess function to return a success response to the frontend client

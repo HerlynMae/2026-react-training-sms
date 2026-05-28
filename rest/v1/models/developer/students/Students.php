@@ -102,6 +102,24 @@ class Students
         return $query;
     }
 
+    public function active()
+    {
+        try {
+            $sql = "update {$this->tblStudents} set ";
+            $sql .= "students_is_active = :students_is_active, ";
+            $sql .= "students_updated = :students_updated ";
+            $sql .= "where students_aid = :students_aid ";
+            $query = $this->connection->prepare($sql);
+            $query->execute([
+                'students_is_active' => $this->students_is_active,
+                'students_updated' => $this->students_updated,
+                'students_aid' => $this->students_aid,
+            ]);
+        } catch (PDOException $ex) {
+            $query = false;
+        }
+        return $query;
+    }
     public function update()
     {
         try {
@@ -125,9 +143,23 @@ class Students
                 'students_updated' => $this->students_updated,
                 'students_aid' => $this->students_aid,
             ]);
-        } catch (PDOException $e) {
-            returnHandleError($e);
+        } catch (PDOException $ex) {
             $query = false;
+        }
+        return $query;
+    }
+
+    public function delete()
+    {
+        try {
+            $sql = "delete from {$this->tblStudents} ";
+            $sql .= "where students_aid = :students_aid ";
+            $query = $this->connection->prepare($sql);
+            $query->execute([
+                'students_aid' => $this->students_aid,
+            ]);
+        } catch (PDOException $e) {
+            $query =  false;
         }
         return $query;
     }

@@ -1,15 +1,27 @@
+import { apiVersion, handleEscape } from "@/functions/functions-general";
+import ModalArchive from "../partials/modal/ModalArchive";
 import NoData from "../partials/NoData";
 import ServerError from "../partials/ServerError";
 import FetchingSpinner from "../partials/spinners/FetchingSpinner";
 import TableLoading from "../partials/TableLoading";
+import { StoreContext } from "../store/StoreContext";
+import React from "react";
+import ModalRestore from "@/partials/modal/ModalRestore";
+import ModalDelete from "@/partials/modal/ModalDelete";
 
 const ResponsiveTable = ({
   data,
   columns,
+  pathUrl = "", //to update the statuses and delete api route url
   isLoading = false,
   isFetching = false,
+  dataItem = {},
+  queryKey = "", //string or array
   error = false,
 }) => {
+  const { store, dispatch } = React.useContext(StoreContext);
+  const deletePathUrl = pathUrl.split("/");
+  const deleteLastIndex = deletePathUrl[deletePathUrl.length - 1];
   const mainCol = columns.find((c) => c.mobileLabel === null);
   const topRightCol = columns.find((c) => c.mobilePosition === "topRight");
   const bodyColumns = columns.filter(
@@ -19,13 +31,13 @@ const ResponsiveTable = ({
       c.mobilePosition !== "bottomRight",
   );
   const bottomRight = columns.find((c) => c.mobilePosition === "bottomRight");
-
+  handleEscape(() => handleClose());
   return (
     <>
       {/* Desktop table */}
       <div className="hidden xl:block overflow-x-auto relative">
         {/* this is when page is loaded but need to refetch the data */}
-        {isLoading && isFetching && <FetchingSpinner />}
+        {!isLoading && isFetching && <FetchingSpinner />}
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
@@ -43,7 +55,7 @@ const ResponsiveTable = ({
             {isLoading ? (
               <tr>
                 <td colSpan="100%" className="p-5">
-                  //this is initial page loading
+                  {/* this is initial page loading */}
                   <TableLoading cols={2} count={20} />
                 </td>
               </tr>
@@ -78,9 +90,9 @@ const ResponsiveTable = ({
 
       {/* Mobile cards */}
       {/* when page is loaded but need to refetch the data */}
-      {isLoading && !isFetching && <FetchingSpinner />}
+      {!isLoading && isFetching && <FetchingSpinner />}
       <div className="xl:hidden divide-y divide-gray-100">
-        {!isLoading ? (
+        {isLoading ? (
           <div className=" p-5 ">
             <TableLoading cols={5} count={30} />
           </div>
@@ -116,6 +128,38 @@ const ResponsiveTable = ({
           ))
         )}
       </div>
+
+      {/* action event */}
+      {/* archive */}
+      {store.isArchive && (
+        <ModalArchive
+          endpoint={`${apiVersion}${pathUrl}/active.php?id=${dataItem?.id ?? "0"}`}
+          msg={`Are you sure you want to archive this record?`}
+          successMsg={`Successfully archived`}
+          item={dataItem}
+          queryKey={queryKey}
+        />
+      )}
+      {/* restore */}
+      {store.isRestore && (
+        <ModalRestore
+          endpoint={`${apiVersion}${pathUrl}/active.php?id=${dataItem?.id ?? "0"}`}
+          msg={`Are you sure you want to restore this record?`}
+          successMsg={`Successfully restored`}
+          item={dataItem}
+          queryKey={queryKey}
+        />
+      )}
+      {/* delete */}
+      {store.isDelete && (
+        <ModalDelete
+          endpoint={`${apiVersion}${pathUrl}/${deleteLastIndex}.php?id=${dataItem?.id ?? "0"}`}
+          msg={`Are you sure you want to delete this record?`}
+          successMsg={`Successfully deleted`}
+          item={dataItem}
+          queryKey={queryKey}
+        />
+      )}
     </>
   );
 };
