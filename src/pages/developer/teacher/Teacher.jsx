@@ -8,17 +8,30 @@ import useDocumentTitle from "../../../functions/custom-hooks/useDocumentTitle";
 import TeacherTable from "./TeacherTable";
 import { StoreContext } from "@/store/StoreContext";
 import { setIsAdd } from "@/store/StoreAction";
+import ModalAddTeachers from "./ModalAddTeachers";
+import useQueryData from "@/functions/custom-hooks/useQueryData";
+import { apiVersion } from "@/functions/functions-general";
 
 export const handleAction = (setIsOpen, setItemEdit, item) => {
-  setIsOpen(true);
-  setTimeout(item);
+  setIsOpen(true); //opens modal
+  setItemEdit(item); //stores selected item
 };
 
 const Teacher = () => {
   useDocumentTitle("Teachers | School Management System");
   const { store, dispatch } = React.useContext(StoreContext);
   const [itemEdit, setItemEdit] = React.useState(null);
-  const totalTeachers = teachers.length;
+
+  //data is our props similar to what we deed on our table
+  //dataTeachers is our custom variable
+  const { data: dataTeachers } = useQueryData(
+    `${apiVersion}/controllers/developer/teachers/teachers.php`, // where the request is sent.
+    "get", // method
+    "teachers", //will get the data
+  );
+
+  const totalTeachers = dataTeachers?.data?.length || 0; // this will count the list, if there is no record show 0
+
   return (
     <>
       <Layout menu="teachers">
@@ -63,6 +76,12 @@ const Teacher = () => {
           </>
         )}
       </Layout>
+      {store.isAdd && (
+        <ModalAddTeachers
+          itemEdit={itemEdit}
+          setIsOpen={(val) => dispatch(setIsAdd(val))}
+        />
+      )}
     </>
   );
 };

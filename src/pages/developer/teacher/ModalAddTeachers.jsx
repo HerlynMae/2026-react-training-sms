@@ -4,10 +4,9 @@ import { apiVersion } from "@/functions/functions-general";
 import ModalWrapperSide from "@/partials/modal/ModalWrapperSide";
 import ButtonSpinner from "@/partials/spinners/ButtonSpinner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Formik } from "formik";
+import { Formik, Form } from "formik";
 import React from "react";
 import { FaTimesCircle } from "react-icons/fa";
-import { Form } from "react-router-dom";
 import * as Yup from "yup"; //for vaidation of form
 
 const ModalAddTeachers = ({ itemEdit, setIsOpen }) => {
@@ -19,10 +18,10 @@ const ModalAddTeachers = ({ itemEdit, setIsOpen }) => {
     mutationFn: async (values) =>
       queryData(
         itemEdit
-          ? `${apiVersion}/controllers/developer/teachers/teachers.php?id${itemEdit.teachers_aid}` //will read the data based on aid
-          : `${apiVersion}/controllers/developers/teachers.teachers.php`, //will create the url
-        itemEdit ? "PUT" : "POST", //create and update
-        values, //the data will be sent to the server
+          ? `${apiVersion}/controllers/developer/teachers/teachers.php?id=${itemEdit.teachers_aid}`
+          : `${apiVersion}/controllers/developer/teachers/teachers.php`,
+        itemEdit ? "PUT" : "POST",
+        values,
       ),
     onSuccess: (data) => {
       if (data.success) {
@@ -38,6 +37,7 @@ const ModalAddTeachers = ({ itemEdit, setIsOpen }) => {
   //this will be the inital value for formik form
   //if you tend to edit the data it will show the record of an item
   const initVal = {
+    teachers_id: itemEdit ? itemEdit.teachers_id : "",
     teachers_first_name: itemEdit ? itemEdit.teachers_first_name : "",
     teachers_middle_name: itemEdit ? itemEdit.teachers_middle_name : "",
     teachers_last_name: itemEdit ? itemEdit.teachers_last_name : "",
@@ -47,6 +47,7 @@ const ModalAddTeachers = ({ itemEdit, setIsOpen }) => {
 
   //validation if the fields are required or not
   const yupSchema = Yup.object({
+    teachers_id: Yup.string().trim().required("Required"),
     teachers_first_name: Yup.string().trim().required("Required"),
     teachers_middle_name: Yup.string().trim().required("Required"),
     teachers_last_name: Yup.string().trim().required("Required"),
@@ -97,6 +98,13 @@ const ModalAddTeachers = ({ itemEdit, setIsOpen }) => {
                     <div className="modal-container">
                       <div className="relative mb-6">
                         <InputText
+                          label="Teacher ID"
+                          name="teachers_id"
+                          disabled={mutation.isPending}
+                        />
+                      </div>
+                      <div className="relative mb-6">
+                        <InputText
                           label="First Name"
                           name="teachers_first_name"
                           disabled={mutation.isPending}
@@ -116,6 +124,20 @@ const ModalAddTeachers = ({ itemEdit, setIsOpen }) => {
                           disabled={mutation.isPending}
                         />
                       </div>
+                      <div className="relative mb-6">
+                        <InputText
+                          label="Subject"
+                          name="teachers_subject"
+                          disabled={mutation.isPending}
+                        />
+                      </div>
+                      <div className="relative mb-6">
+                        <InputText
+                          label="Email"
+                          name="teachers_email"
+                          disabled={mutation.isPending}
+                        />
+                      </div>
                     </div>
                     <div className="modal-action">
                       <button
@@ -132,7 +154,7 @@ const ModalAddTeachers = ({ itemEdit, setIsOpen }) => {
                         )}
                       </button>
                       <button
-                        className="btn-modal-submit"
+                        className="btn-modal-cancel"
                         type="reset"
                         onClick={handleClose}
                         disabled={mutation.isPending}

@@ -140,7 +140,7 @@ const studentColumns = [
   },
 ];
 
-const StudentTable = ({ setItemEdit, itemEdit }) => {
+const StudentTable = ({ setItemEdit, itemEdit, limit = null }) => {
   const { store, dispatch } = React.useContext(StoreContext);
 
   const {
@@ -149,37 +149,43 @@ const StudentTable = ({ setItemEdit, itemEdit }) => {
     error: errorStudents,
     data: dataStudents,
   } = useQueryData(
-    `${apiVersion}/controllers/developer/students/students.php`, // api path
-    "get", //method
-    "students", //key
+    `${apiVersion}/controllers/developer/students/students.php`, // always fetch all
+    "get",
+    ["students"], // single shared query key
   );
 
-  console.log("isLoadingStudents", isLoadingStudents);
+  // get the student list, or an empty array if no data
+  const allStudents = dataStudents?.data ?? [];
 
-  const studentArray =
-    dataStudents?.data.map((item) => {
-      return {
-        ...item,
-        id: item.students_aid,
-        name: `${item.students_first_name} ${item.students_last_name}`,
-        studentId: item.students_id,
-        gradeSection: `${item.students_grade} - ${item.students_section}`,
-        status: item.students_is_active ? "Active" : "Inactive",
+  //copy the list and arrange it from smallest id to biggest.
+  //i used a and b for the variable to compare and make the sorting
+  const sorted = [...allStudents].sort(
+    (a, b) => a.students_aid - b.students_aid,
+  );
 
-        setIsAdd: (val) => dispatch(setIsAdd(val)),
-        setIsArchive: (val) => dispatch(setIsArchive(val)),
-        setIsRestore: (val) => dispatch(setIsRestore(val)),
-        setIsDelete: (val) => dispatch(setIsDelete(val)),
-        setItemEdit,
-      };
-    }) ?? [];
+  //if there's limit, take only that many items — otherwise take all
+  const limited = limit ? sorted.slice(0, limit) : sorted;
+
+  //transform each raw api item into a cleaner object the table understands
+  const studentArray = limited.map((item) => ({
+    ...item,
+    id: item.students_aid,
+    name: `${item.students_first_name} ${item.students_last_name}`,
+    studentId: item.students_id,
+    gradeSection: `${item.students_grade} - ${item.students_section}`,
+    status: item.students_is_active ? "Active" : "Inactive",
+    setIsAdd: (val) => dispatch(setIsAdd(val)),
+    setIsArchive: (val) => dispatch(setIsArchive(val)),
+    setIsRestore: (val) => dispatch(setIsRestore(val)),
+    setIsDelete: (val) => dispatch(setIsDelete(val)),
+    setItemEdit,
+  }));
 
   return (
     <ResponsiveTable
       isLoading={isLoadingStudents}
       isFetching={isFetchingStudents}
       error={errorStudents}
-      // data={students}
       data={studentArray}
       columns={studentColumns}
       dataItem={itemEdit}

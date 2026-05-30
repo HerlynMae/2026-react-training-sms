@@ -13,7 +13,7 @@ const useQueryData = (
   return useQuery({
     queryKey: [key, id],
     queryFn: async () => queryData(endpoint, method, fd),
-    retry: false,
+    retry: false, //if fails, do not retry automatically
     refetchOnWindowFocus: refetchOnWindowFocus,
     cacheTime: 200,
     ...queryProperty,
@@ -21,3 +21,7 @@ const useQueryData = (
 };
 
 export default useQueryData;
+
+// useQuery - React Query tool for fetching data
+// queryData - your custom API function (from previous code)
+//This hook is a reusable API fetch tool using React Query that automatically handles caching, fetching, and state management.

@@ -3,28 +3,37 @@ import Header from "../../../partials/Header";
 import Layout from "../Layout";
 import { FaEdit, FaPlus, FaTrash, FaUser } from "react-icons/fa";
 import useDocumentTitle from "../../../functions/custom-hooks/useDocumentTitle";
-import { students } from "../../json/students";
-// import StudentDataTable from "../../../components/StudentDataTable";
 import StudentTable from "./StudentTable";
 import ModalAddStudents from "./ModalAddStudents";
 import { StoreContext } from "../../../store/StoreContext";
 import { setIsAdd } from "../../../store/StoreAction";
+import useQueryData from "@/functions/custom-hooks/useQueryData";
+import { apiVersion } from "@/functions/functions-general";
 
+//Open modal and set selected student
 export const handleAction = (setIsOpen, setItemEdit, item) => {
   console.log(setIsOpen);
-  setIsOpen(true);
-  setItemEdit(item);
+  setIsOpen(true); //opens modal
+  setItemEdit(item); //stores selected item
 };
 
+//this is the whole page
 const Student = () => {
-  useDocumentTitle("Students | School Management System");
-  const { store, dispatch } = React.useContext(StoreContext);
-  const [itemEdit, setItemEdit] = React.useState(null);
+  useDocumentTitle("Students | School Management System"); //Changes browser tab title
+  const { store, dispatch } = React.useContext(StoreContext); //store - global data, dispatch - update global data
+  const [itemEdit, setItemEdit] = React.useState(null); //Stores selected student for editing
 
-  const totalStudents = students.length;
+  const { data: dataStudents } = useQueryData(
+    `${apiVersion}/controllers/developer/students/students.php`,
+    "get",
+    "students",
+  );
+
+  const totalStudents = dataStudents?.data?.length || 0;
 
   return (
     <>
+      {/* layout - sidebar */}
       <Layout menu="students">
         {({ onToggle }) => (
           <>

@@ -45,6 +45,13 @@ function checkReadById($object)
     return $query;
 }
 
+function checkReadLimit($object)
+{
+    $query = $object->readLimit();
+    checkQuery($query, "There's a problem processing your request. (readLimit)");
+    return $query;
+}
+
 function checkUpdate($object)
 {
     $query = $object->update();

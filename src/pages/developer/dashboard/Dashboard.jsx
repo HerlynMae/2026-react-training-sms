@@ -12,10 +12,13 @@ import { Link } from "react-router-dom";
 import TableLoading from "../../../partials/TableLoading";
 import NoData from "../../../partials/NoData";
 import ServerError from "../../../partials/ServerError";
+import useQueryData from "@/functions/custom-hooks/useQueryData";
+import { apiVersion } from "@/functions/functions-general";
 
 const Dashboard = () => {
   useDocumentTitle("Dashboard | School Management System");
-  const totalStudents = students.length;
+
+
   return (
     <>
       <Layout menu="dashboard">
@@ -44,7 +47,7 @@ const Dashboard = () => {
                       Recent Students
                     </h3>
                     <p className="text-sm text-gray-500 mt-1">
-                      Latest {totalStudents} students added to the system
+                      Latest students added to the system
                     </p>
                   </div>
                   {/* <Link
@@ -53,18 +56,16 @@ const Dashboard = () => {
                   >
                     View All <FaArrowRight className="ml-1" />
                   </Link> */}
-                  <a
-                    href="./students.html"
+
+                  <Link
+                    to="/developer/students"
                     className="text-blue-600 hover:text-blue-700 text-sm font-medium transition flex items-center"
                   >
                     View All <FaArrowRight className="ml-1" />
-                  </a>
+                  </Link>
                 </div>
 
-                <StudentTable students={students} />
-                <TableLoading count={20} cols={10} />
-                <NoData />
-                <ServerError />
+                <StudentTable limit={5} />
               </div>
             </div>
           </>

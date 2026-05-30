@@ -14,6 +14,7 @@ export const urlDeveloper = "developer";
 export const devKey = "123devkey";
 
 // format the numbers separated by comma
+//If something is missing, use backup value
 export const isEmptyItem = (item, x = "") => {
   let result = x;
 
@@ -23,6 +24,7 @@ export const isEmptyItem = (item, x = "") => {
   return result;
 };
 
+//Converts a raw date into readable text
 export const formatDate = (dateVal, val = "", format = "") => {
   const formatedDate = val;
   if (typeof dateVal !== "undefined" && dateVal !== "") {
@@ -52,6 +54,8 @@ export const dateOptions = (format = "") => {
   return options;
 };
 
+
+//Close something when ESC key is pressed
 export const handleEscape = (handleClose) => {
   React.useEffect(() => {
     const handleEscape = (e) => {
@@ -64,7 +68,7 @@ export const handleEscape = (handleClose) => {
   });
 };
 
-// get focus on a button
+// get focus on a button, Automatically focuses an input/button when page loads
 export const GetFocus = (id) => {
   React.useEffect(() => {
     const obj = document.getElementById(id);

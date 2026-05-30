@@ -26,6 +26,23 @@ const Classes = () => {
               </small>
             </div>
 
+            {/* filter */}
+            <div className="flex  px-8 pt-6">
+              <div className="flex items-center gap-2 ">
+                <select className="filter-data">
+                  <option>Grade 7</option>
+                  <option>Grade 8</option>
+                  <option>Grade 9</option>
+                  <option>Grade 10</option>
+                </select>
+                <select className="filter-data">
+                  <option>2025-2026</option>
+                  <option>2024-2025</option>
+                  <option>2023-2024</option>
+                </select>
+              </div>
+            </div>
+
             {/* cards wrapper */}
             <div className="px-8 py-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {/* cards */}

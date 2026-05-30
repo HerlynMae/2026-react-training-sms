@@ -11,6 +11,12 @@ import { handleAction } from "./Teacher";
 import { StoreContext } from "@/store/StoreContext";
 import useQueryData from "@/functions/custom-hooks/useQueryData";
 import { apiVersion } from "@/functions/functions-general";
+import {
+  setIsAdd,
+  setIsArchive,
+  setIsDelete,
+  setIsRestore,
+} from "../../../store/StoreAction";
 
 const teachersColumns = [
   // {
@@ -145,20 +151,39 @@ const TeacherTable = ({ setItemEdit, itemEdit }) => {
     "teachers",
   );
 
-  const teachersArray = dataTeachers?.data.map((item) => {
-    return {
-      ...item,
-      id: item.teachers_aid,
-      name: `${item.teachers_first_name} ${item.teachers_last_name}`,
-      subject: `${item.teachers_subject}`,
-      email: `${item.teachers_email}`,
-      status: item.teachers_is_active ? "Active" : "Inactive",
-    };
-  });
+  console.log("isLoadingTeachers", isLoadingTeachers);
+
+  const teachersArray =
+    dataTeachers?.data.map((item) => {
+      return {
+        ...item,
+        id: item.teachers_aid,
+        name: `${item.teachers_first_name} ${item.teachers_last_name}`,
+        subject: item.teachers_subject,
+        email: item.teachers_email,
+        status: item.teachers_is_active ? "Active" : "Inactive",
+
+        setIsAdd: (val) => dispatch(setIsAdd(val)),
+        setIsArchive: (val) => dispatch(setIsArchive(val)),
+        setIsRestore: (val) => dispatch(setIsRestore(val)),
+        setIsDelete: (val) => dispatch(setIsDelete(val)),
+        setItemEdit,
+      };
+    }) ?? [];
 
   return (
     <>
-      <ResponsiveTable data={teachers} columns={teachersColumns} />
+      <ResponsiveTable
+        isLoading={isLoadingTeachers}
+        isFetching={isFetchingTeachers}
+        error={errorTeachers}
+        // data={teachers} - when using data json w/o backend
+        data={teachersArray}
+        columns={teachersColumns}
+        dataItem={itemEdit}
+        queryKey={["teachers"]}
+        pathUrl={`/controllers/developer/teachers`}
+      />
     </>
   );
 };

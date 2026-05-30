@@ -17,6 +17,7 @@ class Students
     public $lastInsertedId;
 
     public $tblStudents;
+    public $limit;
 
     public function __construct($db)
     {
@@ -90,12 +91,30 @@ class Students
             $sql = "select "; // select is used to select data from the database
             $sql .= "* "; // * means select all columns from the database
             $sql .= "from {$this->tblStudents} "; // from is used to specify the table from which to select data
-            $sql .= "where ";
-            $sql  .= "students_aid = :students_aid ";
+            $sql .= "order by ";
+            $sql  .= "students_aid ";
             $query = $this->connection->query($sql); // query is used to execute the SQL statement and return the result set as a PDOStatement object   
             $query->execute([
                 'students_aid' => $this->students_aid,
             ]);
+        } catch (PDOException $e) {
+            $query = false;
+        }
+        return $query;
+    }
+
+
+    public function ReadLimit()
+    {
+        try {
+            $sql = "select "; // select is used to select data from the database
+            $sql .= "* "; // * means select all columns from the database
+            $sql .= "from {$this->tblStudents} "; // from is used to specify the table from which to select data
+            $sql .= "order by ";
+            $sql  .= "students_aid asc ";
+            $sql .= "limit " . (int)($this->limit ?? 5);
+            $query = $this->connection->prepare($sql); // query is used to execute the SQL statement and return the result set as a PDOStatement object   
+            $query->execute();
         } catch (PDOException $e) {
             $query = false;
         }
@@ -115,7 +134,7 @@ class Students
                 'students_updated' => $this->students_updated,
                 'students_aid' => $this->students_aid,
             ]);
-        } catch (PDOException $ex) {
+        } catch (PDOException $e) {
             $query = false;
         }
         return $query;
@@ -143,7 +162,7 @@ class Students
                 'students_updated' => $this->students_updated,
                 'students_aid' => $this->students_aid,
             ]);
-        } catch (PDOException $ex) {
+        } catch (PDOException $e) {
             $query = false;
         }
         return $query;
